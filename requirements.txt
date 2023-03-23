@@ -9,3 +9,4 @@ MarkupSafe==2.1.2
 python-engineio==4.4.0
 python-socketio==5.8.0
 Werkzeug==2.2.3
+aiohttp
