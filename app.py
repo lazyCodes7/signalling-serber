@@ -1,11 +1,10 @@
 
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, join_room
-
+from flask_cors import CORS
 app = Flask(__name__)
 app.secret_key = 'random secret key!'
 socketio = SocketIO(app, cors_allowed_origins="*")
-
 
 @socketio.on('join')
 def join(message):
@@ -13,8 +12,15 @@ def join(message):
     room = message['room']
     join_room(room)
     print('RoomEvent: {} has joined the room {}\n'.format(username, room))
-    emit('ready', {username: username}, to=room, skip_sid=request.sid)
+    emit('ready', {"username": username}, to=room, skip_sid=request.sid)
 
+
+@socketio.on('exchange')
+def exchange(message):
+    username = message['username']
+    room = message['room']
+    print('RoomEvent: {} has shared their username to the room {}\n'.format(username, room))
+    emit('exchange', {"username": username}, to=room, skip_sid=request.sid)
 
 @socketio.on('data')
 def transfer_data(message):
